@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
-// Lector con Java NIO
+// CLASE MAIN: LECTOR CON JAVA.NIO
 public class LectorEMT {
     public static void main(String[] args) {
         // 1. Definición de la ruta del archivo
@@ -36,8 +36,13 @@ public class LectorEMT {
         .toList();
 
         // Impresión y carga de resultados
-        System.out.println("¡DATOS CARGADOS CORRECTAMENTE!\nTotal de registros: " + viajes.size());
+        System.out.println("¡DATOS CARGADOS CORRECTAMENTE!\nTotal de registros: " + viajes.size() + "\n");
+
+        // Pruebas en AnalizadorEMT:
         System.out.println("Prueba con el primer registro: " + viajes.get(0));
+
+        System.out.println("¡Datos cargados con éxito! Total de registros: " + viajes.size());
+
 
         // Excepción
         } catch (Exception e) {

@@ -1,4 +1,6 @@
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -30,5 +32,16 @@ public class AnalizadorEMT {
     // Simula un escenario donde los viajeros de esa línea aumentan un 20%
     public final UnaryOperator<DemandaEMT> SIMULAR_CRECIMIENTO = viaje ->
             new DemandaEMT(viaje.getFecha(), viaje.getLinea(), (int)(viaje.getTotalViajeros() * 1.20));
+
+    public void mostrarTop5ViajesAltaDemanda(List<DemandaEMT> datos) {
+        System.out.println("\n-- Top 5 viajes con más de 3000 pasajeros (alta demanda):");
+
+        // Usamos el Stream para filtrar, ordenar y mostrar los resultados
+        datos.stream()
+                .filter(ALTA_DEMANDA) // Filtra los viajes con alta demanda
+                .sorted(Comparator.comparing(OBTENER_VIAJEROS).reversed()) // Ordena de mayor a menor
+                .limit(5) // Limita a los 5 primeros
+                .forEach(IMPRIMIR_VIAJE); // Imprime cada viaje
+    }
 
 }

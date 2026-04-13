@@ -38,11 +38,9 @@ public class LectorEMT {
         // Impresión y carga de resultados
         System.out.println("¡DATOS CARGADOS CORRECTAMENTE!\nTotal de registros: " + viajes.size() + "\n");
 
-        // Pruebas en AnalizadorEMT:
-        System.out.println("Prueba con el primer registro: " + viajes.get(0));
-
-        System.out.println("¡Datos cargados con éxito! Total de registros: " + viajes.size());
-
+        // Instanciamos el analizador y le pasamos nuestra lista de datos
+        AnalizadorEMT analizador = new AnalizadorEMT();
+        analizador.mostrarTop5ViajesAltaDemanda(viajes);
 
         // Excepción
         } catch (Exception e) {

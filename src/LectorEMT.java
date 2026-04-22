@@ -16,33 +16,33 @@ public class LectorEMT {
         try (Stream<String> lineas = Files.lines(ruta)) {
             // 3. Procesamos el Stream
             List<DemandaEMT> viajes = lineas
-            // Operación Intermedia: Saltamos la primera línea (cabecera)
-            .skip(1)
-            // Transformación de cada Steam en un objeto DemandaETM.
-            .map(linea -> {
-                // Añadimos el separador: en nuestro caso ";"
-                String[] partes = linea.split(";");
+                    // Operación Intermedia: Saltamos la primera línea (cabecera)
+                    .skip(1)
+                    // Transformación de cada Steam en un objeto DemandaETM.
+                    .map(linea -> {
+                        // Añadimos el separador: en nuestro caso ";"
+                        String[] partes = linea.split(";");
 
-                // Convierte el texto a datos reales
-                LocalDate fecha = LocalDate.parse(partes[0]);
-                String lineaBus = partes[1];
-                int viajerosBus = Integer.parseInt(partes[2]);
+                        // Convierte el texto a datos reales
+                        LocalDate fecha = LocalDate.parse(partes[0]);
+                        String lineaBus = partes[1];
+                        int viajerosBus = Integer.parseInt(partes[2]);
 
-                // Devuelve el resultado del .map en forma de objeto DemandaEMT
-                return new DemandaEMT(fecha, lineaBus, viajerosBus);
+                        // Devuelve el resultado del .map en forma de objeto DemandaEMT
+                        return new DemandaEMT(fecha, lineaBus, viajerosBus);
 
-            })
-            // Conversión - Guardamos el resultado en una Lista
-            .toList();
+                    })
+                    // Conversión - Guardamos el resultado en una Lista
+                    .toList();
 
 
         // --- FASE 1: LECTURA Y CARGA DE DATOS ---
             System.out.println("""
                                 
+                                
                                 ==================================================
                                 1. LECTURA Y MODELADO DE DATOS (JAVA.NIO)
                                 ==================================================
-                                
                                 """);
 
             // Impresión y carga de resultados
@@ -53,10 +53,10 @@ public class LectorEMT {
         // --- FASE 2: OPERACIONES INTERMEDIAS ---
             System.out.println("""
                                 
+                                
                                 ==================================================
                                 2. OPERACIONES INTERMEDIAS (FILTER, SORTED, LIMIT)
                                 ==================================================
-                                
                                 """);
 
             // Instanciamos el analizador para el resto de fases
@@ -72,10 +72,10 @@ public class LectorEMT {
         // --- FASE 3: OPERACIONES TERMINALES Y DE CONVERSIÓN ---
             System.out.println("""
                                 
+                                
                                 ==================================================
                                 3. OPERACIONES TERMINALES Y DE CONVERSIÓN
                                 ==================================================
-                                
                                 """);
 
             // 1. Uso de count
@@ -109,9 +109,43 @@ public class LectorEMT {
             DemandaEMT viajeSeguro = analizador.obtenerViajeSeguro(viajes, "999");
             System.out.println(viajeSeguro);
 
-        // Excepción
+
+        // --- FASE 4: ANÁLISIS Y RESULTADOS ---
+            System.out.println("""
+                                
+                                
+                                ==================================================
+                                4. VALIDACIÓN DE HIPÓTESIS Y VISUALIZACIÓN
+                                ==================================================
+                                """);
+
+
+        // --- HIPÓTESIS 1: Fines de semana vs Laborables ---
+            double mediaLab = analizador.mediaLaborables(viajes);
+            double mediaFin = analizador.mediaFinesDeSemana(viajes);
+
+            System.out.println("--- HIPÓTESIS 1: El uso de autobuses disminuye drásticamente los fines de semana.");
+            double maxH1 = Math.max(mediaLab, mediaFin);
+            imprimirBarraConsola("Laborables", mediaLab, maxH1);
+            imprimirBarraConsola("Fin de Sem.", mediaFin, maxH1);
+
+            if (mediaLab > mediaFin) {
+                System.out.println("✅ VALIDADA: La demanda cae durante el fin de semana.\n");
+            } else {
+                System.out.println("❌ RECHAZADA: La demanda sube o se mantiene el fin de semana.\n");
+            }
+
+        // Excepción de la lectura de archivos
         } catch (Exception e) {
             System.out.println("ERROR al procesar el archivo: " + e.getMessage());
         }
+    }
+
+    // GRÁFICO: Metodo auxiliar estático para dibujar barras proporcionales en la consola
+    private static void imprimirBarraConsola(String etiqueta, double valor, double maximo) {
+        int limiteCaracteres = 40;
+        int longitudBarra = (int) ((valor / maximo) * limiteCaracteres);
+        String grafica = "█".repeat(Math.max(1, longitudBarra));
+        System.out.printf("%-12s | %s (%d)\n", etiqueta, grafica, Math.round(valor));
     }
 }

@@ -11,7 +11,12 @@ import java.util.stream.Collectors;
 
 public class AnalizadorEMT {
 
-  // PASO 1: Definimos las interfaces funcionales como constantes reutilizables
+// ==========================================
+// Fase 3: Procesamiento Funcional con Streams
+// ==========================================
+
+
+    // PASO 1: Definimos las interfaces funcionales como constantes reutilizables
 
     // 1. PREDICATE (Condición: recibe un viaje, devuelve true/false)
     // Filtramos los viajes que superan los 3000 pasajeros (puedes ajustar el número)
@@ -36,7 +41,7 @@ public class AnalizadorEMT {
             new DemandaEMT(viaje.getFecha(), viaje.getLinea(), (int)(viaje.getTotalViajeros() * 1.20));
 
 
-  // PASO 2: Metodo para mostrar el top 5 de viajes con alta demanda usando las interfaces funcionales
+    // PASO 2: Metodo para mostrar el top 5 de viajes con alta demanda usando las interfaces funcionales
 
     // Uso de Predicate, Comparator, limit y Consumer (Operaciones intermedias: filter, sorted, limit)
     public void mostrarTop5ViajesAltaDemanda(List<DemandaEMT> datos) {
@@ -60,7 +65,8 @@ public class AnalizadorEMT {
                 .toList(); // 4) Convertir y devolver
     }
 
-  // PASO 3: Aplicar operaciones terminales o de conversión
+
+    // PASO 3: Aplicar operaciones terminales o de conversión
 
     // Metodo 1: Uso de map, distinct, skip y toList (Conversión)
     // Obtiene una lista con las líneas de bus únicas, eliminando duplicados y saltando las 2 primeras
@@ -126,4 +132,30 @@ public class AnalizadorEMT {
                 .findFirst() // Operación terminal principal
                 .orElseGet(VIAJE_POR_DEFECTO); // Respaldo terminal
     }
+
+
+
+
+// ==========================================
+// Fase 4: Análisis y Resultados
+// ==========================================
+
+// --- HIPÓTESIS 1: Fines de semana vs Laborables ---
+
+    // Calcula la media de pasajeros de Lunes (1) a Viernes (5)
+    public double mediaLaborables(List<DemandaEMT> datos) {
+        return datos.stream()
+                .filter(viaje -> viaje.getFecha().getDayOfWeek().getValue() <= 5)
+                .mapToInt(DemandaEMT::getTotalViajeros)
+                .average().orElse(0.0);
+    }
+
+    // Calcula la media de pasajeros de Sábado (6) y Domingo (7)
+    public double mediaFinesDeSemana(List<DemandaEMT> datos) {
+        return datos.stream()
+                .filter(viaje -> viaje.getFecha().getDayOfWeek().getValue() >= 6)
+                .mapToInt(DemandaEMT::getTotalViajeros)
+                .average().orElse(0.0);
+    }
+
 }

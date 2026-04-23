@@ -158,4 +158,23 @@ public class AnalizadorEMT {
                 .average().orElse(0.0);
     }
 
+
+// --- HIPÓTESIS 2: Primera vs Segunda Quincena ---
+
+    // Calcular la media de viajeros en los primeros 15 días del mes (1-15)
+    public double mediaPrimeraQuincena(List<DemandaEMT> datos) {
+        return datos.stream()
+                .filter(viaje -> viaje.getFecha().getDayOfMonth() <= 15)
+                .mapToInt(DemandaEMT::getTotalViajeros)
+                .average().orElse(0.0);
+    }
+
+    // Calcular la media de viajeros desde el día 16 hasta final de mes
+    public double mediaSegundaQuincena(List<DemandaEMT> datos) {
+        return datos.stream()
+                .filter(viaje -> viaje.getFecha().getDayOfMonth() > 15)
+                .mapToInt(DemandaEMT::getTotalViajeros)
+                .average().orElse(0.0);
+    }
+
 }

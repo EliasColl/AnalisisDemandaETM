@@ -135,6 +135,22 @@ public class LectorEMT {
                 System.out.println("❌ RECHAZADA: La demanda sube o se mantiene el fin de semana.\n");
             }
 
+
+        // --- HIPÓTESIS 2: Primera vs Segunda Quincena ---
+            double mediaQ1 = analizador.mediaPrimeraQuincena(viajes);
+            double mediaQ2 = analizador.mediaSegundaQuincena(viajes);
+
+            System.out.println("--- HIPÓTESIS 2: Se viaja más en la primera quincena del mes.");
+            double maxH2 = Math.max(mediaQ1, mediaQ2);
+            imprimirBarraConsola("1ª Quincena", mediaQ1, maxH2);
+            imprimirBarraConsola("2ª Quincena", mediaQ2, maxH2);
+
+            if (mediaQ1 > mediaQ2) {
+                System.out.println("✅ VALIDADA: Hay más movimiento de viajeros en los primeros 15 días del mes.\n");
+            } else {
+                System.out.println("❌ RECHAZADA: La segunda mitad del mes registra más o igual demanda.\n");
+            }
+
         // Excepción de la lectura de archivos
         } catch (Exception e) {
             System.out.println("ERROR al procesar el archivo: " + e.getMessage());

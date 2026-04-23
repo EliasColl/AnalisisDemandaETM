@@ -151,6 +151,22 @@ public class LectorEMT {
                 System.out.println("❌ RECHAZADA: La segunda mitad del mes registra más o igual demanda.\n");
             }
 
+
+        // --- HIPÓTESIS 3: Líneas Minoritarias ---
+            long viajesFantasma = analizador.contarViajesFantasma(viajes);
+            double porcentajeFantasma = (double) viajesFantasma / viajes.size() * 100;
+
+            System.out.println("--- HIPÓTESIS 3: Más del 5% de los registros diarios de la EMT mueven menos de 500 pasajeros.");
+            System.out.printf("-> Viajes totales analizados: %d\n", viajes.size());
+            System.out.printf("-> Viajes con < 500 pasajeros: %d (%.2f%% del total)\n", viajesFantasma, porcentajeFantasma);
+
+            if (porcentajeFantasma > 5.0) {
+                System.out.println("✅ VALIDADA: Existe un volumen significativo de rutas con demanda extremadamente baja.\n");
+            } else {
+                System.out.println("❌ RECHAZADA: Las rutas de la EMT son mayoritariamente eficientes.\n");
+            }
+
+
         // Excepción de la lectura de archivos
         } catch (Exception e) {
             System.out.println("ERROR al procesar el archivo: " + e.getMessage());

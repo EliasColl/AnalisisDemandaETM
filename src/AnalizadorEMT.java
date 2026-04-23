@@ -47,11 +47,12 @@ public class AnalizadorEMT {
     public void mostrarTop5ViajesAltaDemanda(List<DemandaEMT> datos) {
         System.out.println("\n-- Top 5 viajes con más de 3000 pasajeros (alta demanda):");
 
+        // Usamos el Stream para filtrar, ordenar y mostrar los resultados
         datos.stream()
-                .filter(ALTA_DEMANDA) // 1) Filtrar
-                .sorted(Comparator.comparing(OBTENER_VIAJEROS).reversed()) // 2) Ordenar
-                .limit(5) // 3) Limitar
-                .forEach(IMPRIMIR_VIAJE); // 4) Consumir (imprimir)
+                .filter(ALTA_DEMANDA) // 1) Filtrar los viajes con alta demanda
+                .sorted(Comparator.comparing(OBTENER_VIAJEROS).reversed()) // 2) Ordena de mayor a menor
+                .limit(5) // 3) Limita a los 5 primeros
+                .forEach(IMPRIMIR_VIAJE); // 4) Consumir (imprimir cada viaje)
     }
 
     // Uso de UnaryOperator (Operación intermedia: map)
@@ -175,6 +176,16 @@ public class AnalizadorEMT {
                 .filter(viaje -> viaje.getFecha().getDayOfMonth() > 15)
                 .mapToInt(DemandaEMT::getTotalViajeros)
                 .average().orElse(0.0);
+    }
+
+
+// --- HIPÓTESIS 3: Líneas Minoritarias ---
+
+    // Contar cuántos viajes tuvieron menos de 500 viajeros (posibles "viajes fantasma")
+    public long contarViajesFantasma(List<DemandaEMT> datos) {
+        return datos.stream()
+                .filter(viaje -> viaje.getTotalViajeros() < 500)
+                .count();
     }
 
 }
